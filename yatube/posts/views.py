@@ -1,4 +1,3 @@
-from django.contrib.auth import login
 from core.templatetags.user_filters import authorized_only
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -26,10 +25,10 @@ def index(request):
 def group_posts(request, slug):
     """Information for displaying on the page with posts grouped by GROUPS."""
     group = get_object_or_404(Group, slug=slug)
-    post_list_group = Post.objects.filter(group=group).all()
-    paginator_group = Paginator(post_list_group, 10)
-    page_number_group = request.GET.get('page')
-    page_obj = paginator_group.get_page(page_number_group)
+    post_list = Post.objects.filter(group=group).all()
+    paginator = Paginator(post_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
         'group': group,
         'page_obj': page_obj,
