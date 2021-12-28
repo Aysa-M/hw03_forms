@@ -10,7 +10,8 @@ class Post(models.Model):
     Класс Post используется для создания моделей Post
     (пост в социальной сети).
     """
-    text = models.TextField(max_length=10000, 
+    text = models.TextField(
+        max_length=10000, 
         validators=[validate_not_empty],
         blank=False
     )
