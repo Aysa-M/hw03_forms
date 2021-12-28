@@ -11,7 +11,7 @@ class Post(models.Model):
     (пост в социальной сети).
     """
     text = models.TextField(
-        max_length=10000, 
+        max_length=10000,
         validators=[validate_not_empty],
         blank=False
     )
