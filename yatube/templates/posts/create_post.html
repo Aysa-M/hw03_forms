@@ -36,7 +36,7 @@
                       {% endif %}               
                       <select name="group" class="form-control" id="{{ field.id_for_label }}" }}>
                         <option value="" selected>---------</option>
-                        {% for group in groups %}
+                        {% for group in group %}
                           <option value="{{ group.pk }}">{{ group.title }}</option>
                         {% endfor %}
                       </select>

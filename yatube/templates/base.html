@@ -1,4 +1,4 @@
-{% load static %}<!-- Вынуждена написать команду, т.к. в противном случае pytest не пропускает и выдает ошибку. -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
   <head>    
@@ -15,10 +15,12 @@
       rel="stylesheet"
       integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
       crossorigin="anonymous">
-    <title>{% block title %}YaTube Последние обновления на сайте{% endblock %}</title>
+    <title>
+      {% block title %}YaTube Последние обновления на сайте{% endblock %}
+    </title>
   </head>
   <body>
-    <header>  
+    <header>
       {% include 'includes/header.html' %}
     </header>
     <main> 
