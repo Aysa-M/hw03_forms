@@ -1,4 +1,3 @@
-from core.templatetags.user_filters import authorized_only
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
@@ -103,11 +102,9 @@ def post_edit(request, post_id):
         return redirect('posts:post_detail', pk=post_id)
 
     if request.method == 'POST':
-        form = PostForm(request.POST, instance-post)
-        if request.user == author:
-            if form.is_valid():
-                post.form.save()
-                return redirect('posts:post_detail', pk=post_id)
-        else:
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post.form.save()
             return redirect('posts:post_detail', pk=post_id)
+ 
     return render(request, 'posts/create_post.html', context)
