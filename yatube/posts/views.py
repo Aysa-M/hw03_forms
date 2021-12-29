@@ -53,7 +53,7 @@ def profile(request, username):
 
 def post_detail(request, post_id):
     """The view shows information about a current post."""
-    post_profile = get_object_or_404(Post, post_id)
+    post_profile = get_object_or_404(Post, pk=post_id)
     title = post_profile.text[:30]
     context = {
         'post_profile': post_profile,
@@ -73,7 +73,7 @@ def post_create(request):
             new_post = form.save(False)
             new_post.author = request.user
             new_post.save()
-            return redirect('posts:profile', username=new_post.author.username)
+            return redirect('posts:profile', username=new_post.author)
         else:
             form = PostForm()
     context = {
@@ -88,10 +88,10 @@ def post_edit(request, post_id):
     """
     This view edits the post by its id and saves changes in database.
     """
-    post = get_object_or_404(Post, post_id)
-    form = PostForm(instance=post)
+    post = get_object_or_404(Post, pk=post_id)
+    form = PostForm(request.POST or None, instance=post)
     groups = Group.objects.all()
-    author = post.author.username
+    author = post.author
     is_edit = True
     context = {
         'form': form,
@@ -102,8 +102,7 @@ def post_edit(request, post_id):
         return redirect('posts:post_detail', post_id)
 
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
         if form.is_valid():
-            post.form.save()
+            form.save()
             return redirect('posts:post_detail', post_id)
     return render(request, 'posts/create_post.html', context)
