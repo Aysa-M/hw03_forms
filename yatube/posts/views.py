@@ -88,7 +88,7 @@ def post_edit(request, post_id):
     """
     This view edits the post by its id and saves changes in database.
     """
-    post = get_object_or_404(Post, pk=post_id)
+    post = get_object_or_404(Post, post_id)
     form = PostForm(instance=post)
     groups = Group.objects.all()
     author = post.author.username
@@ -99,11 +99,11 @@ def post_edit(request, post_id):
         'groups': groups,
     }
     if author != request.user:
-        return redirect('posts:post_detail', pk=post_id)
+        return redirect('posts:post_detail', post_id)
 
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             post.form.save()
-            return redirect('posts:post_detail', pk=post_id)
+            return redirect('posts:post_detail', post_id)
     return render(request, 'posts/create_post.html', context)
