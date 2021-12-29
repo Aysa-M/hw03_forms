@@ -106,5 +106,4 @@ def post_edit(request, post_id):
         if form.is_valid():
             post.form.save()
             return redirect('posts:post_detail', pk=post_id)
- 
     return render(request, 'posts/create_post.html', context)
