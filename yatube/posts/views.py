@@ -53,7 +53,7 @@ def profile(request, username):
 
 def post_detail(request, post_id):
     """The view shows information about a current post."""
-    post_profile = get_object_or_404(Post, pk=post_id)
+    post_profile = get_object_or_404(Post, post_id)
     title = post_profile.text[:30]
     context = {
         'post_profile': post_profile,
@@ -73,7 +73,7 @@ def post_create(request):
             new_post = form.save(False)
             new_post.author = request.user
             new_post.save()
-            return redirect('posts:profile', username=request.user.username)
+            return redirect('posts:profile', username=new_post.author.username)
         else:
             form = PostForm()
     context = {
