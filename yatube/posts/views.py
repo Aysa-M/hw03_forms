@@ -94,7 +94,7 @@ def post_edit(request, post_id):
     author = post.author
     if author != request.user:
         return redirect('posts:post_detail', post_id)
-        
+
     form = PostForm(request.POST or None, instance=post)
     groups = Group.objects.all()
     is_edit = True
