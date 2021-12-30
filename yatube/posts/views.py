@@ -10,6 +10,7 @@ from .models import Group, Post
 count_per_page = settings.COUNT_PER_PAGE
 LETTERS_FOR_TITLE = 30
 
+
 def index(request):
     """Information which is showing up on the start page."""
     post_list = Post.objects.all()
@@ -92,8 +93,8 @@ def post_edit(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     author = post.author
     if author != request.user:
-        return redirect('posts:post_detail', post_id)  
-      
+        return redirect('posts:post_detail', post_id)
+        
     form = PostForm(request.POST or None, instance=post)
     groups = Group.objects.all()
     is_edit = True
