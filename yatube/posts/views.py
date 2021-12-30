@@ -2,15 +2,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
+from django.conf import settings
 
 from .forms import PostForm
 from .models import Group, Post
 
+count_per_page = settings.COUNT_PER_PAGE
+LETTERS_FOR_TITLE = 30
 
 def index(request):
     """Information which is showing up on the start page."""
     post_list = Post.objects.all()
-    paginator = Paginator(post_list, 10)
+    paginator = Paginator(post_list, count_per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -23,7 +26,7 @@ def group_posts(request, slug):
     """Information for displaying on the page with posts grouped by GROUPS."""
     group = get_object_or_404(Group, slug=slug)
     post_list = Post.objects.filter(group=group).all()
-    paginator = Paginator(post_list, 10)
+    paginator = Paginator(post_list, count_per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -39,7 +42,7 @@ def profile(request, username):
     """
     author = get_object_or_404(User, username=username)
     post_list = Post.objects.filter(author=author).all()
-    paginator = Paginator(post_list, 10)
+    paginator = Paginator(post_list, count_per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     post_quantity = post_list.count()
@@ -54,7 +57,7 @@ def profile(request, username):
 def post_detail(request, post_id):
     """The view shows information about a current post."""
     post_profile = get_object_or_404(Post, pk=post_id)
-    title = post_profile.text[:30]
+    title = post_profile.text[:LETTERS_FOR_TITLE]
     context = {
         'post_profile': post_profile,
         'title': title,
@@ -74,8 +77,6 @@ def post_create(request):
             new_post.author = request.user
             new_post.save()
             return redirect('posts:profile', username=new_post.author)
-        else:
-            form = PostForm()
     context = {
         'form': form,
         'groups': groups,
@@ -89,17 +90,18 @@ def post_edit(request, post_id):
     This view edits the post by its id and saves changes in database.
     """
     post = get_object_or_404(Post, pk=post_id)
+    author = post.author
+    if author != request.user:
+        return redirect('posts:post_detail', post_id)  
+      
     form = PostForm(request.POST or None, instance=post)
     groups = Group.objects.all()
-    author = post.author
     is_edit = True
     context = {
         'form': form,
-        'is_edit': is_edit,
         'groups': groups,
+        'is_edit': is_edit,
     }
-    if author != request.user:
-        return redirect('posts:post_detail', post_id)
 
     if request.method == 'POST':
         if form.is_valid():

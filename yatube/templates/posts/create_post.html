@@ -1,58 +1,50 @@
 {% extends 'base.html' %}
+{% load user_filters %}
 {% block title %} Пост{% endblock %}
 {% block content %}
     {% include 'users/includes/page_style_param.html' %}
-              <div class="card-body">
-                {% if is_edit %}
-                  Редактировать запись
-                {% else %}
-                  Опубликовать новую запись
-                {% endif %}                
-              </div>
-              {% include 'includes/field_errors.html' %}
+    {% if is_edit %}
+      Редактировать запись
+    {% else %}
+      Опубликовать новую запись
+    {% endif %}                
+    {% include 'includes/field_errors.html' %}
 
-                <form method="post" action="{% url 'posts:post_create' %}">
-                  {% csrf_token %}
+    <form method="post" action="{% url 'posts:post_create' %}">
+    {% csrf_token %}
 
-                  <div class="form-group row my-3 p-3">
-                    <label for="id_text">
-                      {{ field.id_for_label }}
-                      Текст поста               
-                      <span class="required text-danger" >*</span>
-                    </label>
-                    {{ form.text }}             
-                    <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
-                      Текст нового поста
-                    </small>
-                  </div>
-                  <div class="form-group row my-3 p-3">
-                    <div>Выберите группу</div>
-                      <label for="id_group">
-                      Group                  
-                      </label>
-                      {{ field.id_for_label }}
-                      {% if field.field.required %}                 
-                      <span class="required text-danger" >*</span>
-                      {% endif %}               
-                      <select name="group" class="form-control" id="{{ field.id_for_label }}" }}>
-                        <option value="" selected>---------</option>
-                        {% for group in groups %}
-                          <option value="{{ group.pk }}">{{ group.title }}</option>
-                        {% endfor %}
-                      </select>
-                        <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
-                          Группа, к которой будет относиться пост
-                        </small>
-                  </div>
-                  <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">
-                      {% if is_edit %}
-                        Сохранить
-                      {% else %}
-                        Добавить
-                      {% endif %}   
-                    </button>
-                  </div>
-                </form>
-              </div>
+    {% for field in form %}
+    <div class="form-group row my-3 p-3">
+      <label for="{{ field.id_for_label }}">
+        {{ field.label }}               
+        {% if field.field.required %}
+          <span class="required text-danger">*</span>
+        {% endif %}
+      </label>  
+      {{ field|addclass:'form-control' }}           
+      {% if field.help_text %}
+        <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+          {{ field.help_text|safe }}
+        </small>
+      {% endif %}
+      {% if group.pk %}
+        <select name="group" class="form-control" id="{{ field.id_for_label }}" }}>
+          <option value="" selected>---------</option>
+          {% for group in groups %}
+            <option value="{{ group.pk }}">{{ group.title }}</option>
+          {% endfor %}
+        </select>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary">
+        {% if is_edit %}
+          Сохранить
+        {% else %}
+          Добавить
+        {% endif %}   
+      </button>
+    </div>
+    </form>
 {% endblock %}
