@@ -70,7 +70,6 @@ def post_detail(request, post_id):
 def post_create(request):
     """The view creates a new post by a special form."""
     form = PostForm()
-    groups = Group.objects.all()
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -80,7 +79,6 @@ def post_create(request):
             return redirect('posts:profile', username=new_post.author)
     context = {
         'form': form,
-        'groups': groups,
     }
     return render(request, 'posts/create_post.html', context)
 
@@ -96,11 +94,9 @@ def post_edit(request, post_id):
         return redirect('posts:post_detail', post_id)
 
     form = PostForm(request.POST or None, instance=post)
-    groups = Group.objects.all()
     is_edit = True
     context = {
         'form': form,
-        'groups': groups,
         'is_edit': is_edit,
     }
 

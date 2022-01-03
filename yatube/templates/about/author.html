@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Об авторе проекта{% endblock %}
 {% block content %}
-<h1>Об авторе</h1>
-  <main>
+<div class="container py-5">
+  <h1 class="card-header">Об авторе</h1>
     <div>
       <ul>
         <section>
-          <p>
+          <h2>
             Автор - Айса Мацакова.
-          </p>
+          </h2>
         </section>
         <section>
           <p>
@@ -26,7 +26,7 @@
         </section>
         <section>
           <p>
-            Блог создан в ноябре сего {{ year }} года.
+            Сей блог by Автор создан в ноябре 2021 года.
             Темы для обсуждения любые, кроме оскорбительных и вызывающих неприязнь и рознь.
           </p>
         </section>
@@ -37,5 +37,4 @@
         </section>
       </ul>
     </div>
-  </main> 
 {% endblock %}
